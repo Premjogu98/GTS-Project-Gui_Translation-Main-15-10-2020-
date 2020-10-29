@@ -192,8 +192,7 @@ class MyFrame(wx.Frame):
             self.Destroy()
             
         else:
-            wx.MessageBox(' -_- Please Select Source  -_- ', 'Gui Translation',
-                          wx.OK | wx.ICON_ERROR)
+            wx.MessageBox(' -_- Please Select Source  -_- ', 'Gui Translation',wx.OK | wx.ICON_ERROR)
 
         
     def exit(self,event):
