@@ -26,6 +26,8 @@ time.sleep(5)
 browser.get('https://translate.google.com/')
 query = open("C:\\Translation EXE\\query.txt", "r")
 Text_query = query.read()
+input_xpath_list = ['//*[@id="source"]','//*[@aria-label="Source text"]']
+output_xpath_list = ['//*[@class="tlid-translation translation"]','//*[@class="VIiyi"]']
 def connection():
     a3 = 0
     while a3 == 0:
@@ -59,18 +61,29 @@ def check_translated_textarea():
     tr_clear = False
     while tr_clear == False:
         tr_val = ''
-        for tr_box in browser.find_elements_by_xpath('//*[@class="tlid-translation translation"]'):
-            tr_val = 'Exist'
-            print(tr_val)
-            time.sleep(1)
+        for output_xpath in output_xpath_list:
+            for tr_box in browser.find_elements_by_xpath(output_xpath):
+                tr_val = 'Wait until Output Clear'
+                print(tr_val)
+                time.sleep(1)    
         if tr_val == '':
             tr_clear = True
         else:
             tr_clear = False
 
+def click_on_clear():
+    click_clear = False
+    while click_clear == False:
+        for clear_btn in browser.find_elements_by_xpath('//*[@aria-label="Clear source text"]/i'):
+            clear_btn.click()
+            time.sleep(2)    
+            click_clear = True
+            break
+        if click_clear == False:
+            print('Clear Button Not Found')
 
 def click_on_tryagain():
-    print(' -_-  Please wait browser will be refresh automatically after 30 SEC  -_- ')
+    print(' -_-  Please wait browser will be refresh automatically after 30 SEC  === NO OUTPUT FOUND ===  -_- ')
     time.sleep(30)
     try_btn_found = False
     try:
@@ -84,6 +97,7 @@ def click_on_tryagain():
         browser.refresh()
         time.sleep(5)
         for i in browser.find_elements_by_xpath('//*[@id="source"]'):
+            click_on_clear()
             i.clear()
             break
     time.sleep(2)
@@ -103,15 +117,14 @@ def language_detect():
 
 def tarnslation():
     try:
-        input_xpath_list = ['//*[@id="source"]','//*[@aria-label="Source text"]']
-        output_xpath_list = ['//*[@class="tlid-translation translation"]','//*[@class="VIiyi"]']
+        
         trasns = connection()
         cur = trasns.cursor()
         cur.execute(str(Text_query))  
         rows = cur.fetchall()
 
         if len(rows) == 0:
-            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', ' Special translation exe (Tender LIMIT) ',wx.OK | wx.ICON_INFORMATION)
+            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', ' Special translation exe (Tender LIMIT) ', wx.OK | wx.ICON_INFORMATION)
             time.sleep(2)
             browser.close()
             sys.exit()
@@ -152,6 +165,7 @@ def tarnslation():
                     is_available = 1
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
+                            click_on_clear()
                             i.clear()
                             notice_no = re.sub('\s+', ' ', notice_no)
                             notice_no = notice_no.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
@@ -183,6 +197,7 @@ def tarnslation():
                 if purchaser != '':
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
+                            click_on_clear()
                             i.clear()
                             purchaser = re.sub('\s+', ' ', purchaser)
                             purchaser = purchaser.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
@@ -222,6 +237,7 @@ def tarnslation():
                 if address !='':
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
+                            click_on_clear()
                             i.clear()
                             address = re.sub('\s+', ' ', address)
                             address = address.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
@@ -259,6 +275,7 @@ def tarnslation():
                 if title != "":
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
+                            click_on_clear()
                             i.clear()
                             title = re.sub('\s+', ' ', title)
                             title = title.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
@@ -297,6 +314,7 @@ def tarnslation():
                 if description != "":
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
+                            click_on_clear()
                             i.clear()
                             description = re.sub('\s+', ' ', description)
                             description = description.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
@@ -410,12 +428,9 @@ def tarnslation():
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",
-              exc_tb.tb_lineno)
+        print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",exc_tb.tb_lineno)
         time.sleep(2)
-        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ',
-                      'Special translation exe (Tender LIMIT)',
-                      wx.OK | wx.ICON_ERROR)
+        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','Special translation exe (Tender LIMIT)',wx.OK | wx.ICON_ERROR)
         time.sleep(2)
         browser.close()
         sys.exit()
