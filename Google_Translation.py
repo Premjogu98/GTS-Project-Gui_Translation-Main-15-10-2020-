@@ -26,6 +26,7 @@ time.sleep(5)
 browser.get('https://translate.google.com/')
 input_xpath_list = ['//*[@id="source"]','//*[@aria-label="Source text"]']
 output_xpath_list = ['//*[@class="tlid-translation translation"]','//*[@class="VIiyi"]']
+Clear_xpath_list = ['//*[@aria-label="Clear source text"]/i','//*[@class="clear-wrap"]/div/div']
 def connection():
     connection = ''
     a3 = 0
@@ -67,18 +68,29 @@ def check_translated_textarea():
         if tr_val == '':
             tr_clear = True
         else:
+            browser.refresh()
+            time.sleep(2)
+            click_on_clear()
             tr_clear = False
 
 def click_on_clear():
     click_clear = False
     while click_clear == False:
-        for clear_btn in browser.find_elements_by_xpath('//*[@aria-label="Clear source text"]/i'):
-            clear_btn.click()
-            time.sleep(2)    
-            click_clear = True
-            break
+        for Clear_xpath in Clear_xpath_list:
+            try:
+                for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
+                    clear_btn.click()
+                    time.sleep(2)    
+                    click_clear = True
+                    break
+            except:
+                click_clear = True
+                
+            if click_clear == True:
+                break
         if click_clear == False:
             print('Clear Button Not Found')
+            time.sleep(2)
 
 def click_on_tryagain():
     print(' -_-  Please wait browser will be refresh automatically after 30 SEC  === NO OUTPUT FOUND === -_- ')
@@ -136,6 +148,12 @@ def tarnslation():
         # while Exception_loop == True:
         for row in rows:
             try:
+                try:
+                    browser.switch_to.window(browser.window_handles[1])
+                    browser.close()
+                    browser.switch_to.window(browser.window_handles[0])
+                except:
+                    browser.switch_to.window(browser.window_handles[0])
                 id = "%s" % (row["Posting_Id"])
                 source = "%s" % (html.unescape(row["source"]))
                 notice_no = "%s" % (html.unescape(row["notice_no"]))
