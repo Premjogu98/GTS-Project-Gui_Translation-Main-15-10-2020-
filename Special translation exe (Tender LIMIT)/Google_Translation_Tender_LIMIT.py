@@ -14,14 +14,14 @@ chrome_options.add_extension('C:\\Translation EXE\\BrowsecVPN.crx')
 browser = webdriver.Chrome(executable_path=str(f"C:\\Translation EXE\\chromedriver.exe"),chrome_options=chrome_options)
 browser.maximize_window()
 # browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
-wx.MessageBox(' -_-  Add Extension and Then Click On OK BUTTON -_- ', 'Special translation exe (Tender LIMIT)', wx.OK | wx.ICON_ERROR)
+wx.MessageBox(' -_-  Add Extension and Then Click On OK BUTTON -_- ', 'Special Translation Exe', wx.OK | wx.ICON_ERROR)
 
 try:
     browser.switch_to.window(browser.window_handles[1])
     browser.close()
     browser.switch_to.window(browser.window_handles[0])
 except:
-    browser.switch_to.window(browser.window_handles[0])
+    pass
 time.sleep(5)
 browser.get('https://translate.google.com/')
 query = open("C:\\Translation EXE\\query.txt", "r")
@@ -70,10 +70,10 @@ def check_translated_textarea():
         if tr_val == '':
             tr_clear = True
         else:
-            browser.refresh()
+            browser.get('https://translate.google.com/')
             time.sleep(2)
-            click_on_clear()
             tr_clear = False
+
 
 def click_on_clear():
     click_clear = False
@@ -81,13 +81,12 @@ def click_on_clear():
         for Clear_xpath in Clear_xpath_list:
             try:
                 for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
+                    click_clear = True
                     clear_btn.click()
                     time.sleep(2)    
-                    click_clear = True
                     break
             except:
-                click_clear = True
-                
+                pass
             if click_clear == True:
                 break
         if click_clear == False:
@@ -106,13 +105,8 @@ def click_on_tryagain():
     except:
         pass
     if try_btn_found == False:
-        browser.refresh()
-        time.sleep(5)
-        for i in browser.find_elements_by_xpath('//*[@id="source"]'):
-            click_on_clear()
-            i.clear()
-            break
-    time.sleep(2)
+        browser.get('https://translate.google.com/')
+        time.sleep(2)
 
 
 def language_detect():
@@ -136,7 +130,7 @@ def tarnslation():
         rows = cur.fetchall()
 
         if len(rows) == 0:
-            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', ' Special translation exe (Tender LIMIT) ', wx.OK | wx.ICON_INFORMATION)
+            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', ' Special Translation Exe ', wx.OK | wx.ICON_INFORMATION)
             time.sleep(2)
             browser.close()
             sys.exit()
@@ -149,6 +143,12 @@ def tarnslation():
         # while Exception_loop == True:
         for row in rows:
             try:
+                try:
+                    browser.switch_to.window(browser.window_handles[1])
+                    browser.close()
+                    browser.switch_to.window(browser.window_handles[0])
+                except:
+                    pass
                 id = "%s" % (row["Posting_Id"])
                 source = "%s" % (html.unescape(row["source"]))
                 notice_no = "%s" % (html.unescape(row["notice_no"]))
@@ -188,7 +188,7 @@ def tarnslation():
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special translation exe (Tender LIMIT)', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special Translation Exe', wx.OK | wx.ICON_WARNING)
                     else:
                         time.sleep(2)
                         for output_xpath in output_xpath_list:
@@ -222,7 +222,7 @@ def tarnslation():
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special translation exe (Tender LIMIT) ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special Translation Exe', wx.OK | wx.ICON_WARNING)
                     else:
                         time.sleep(2)
                         if If_other_Than_English == True:
@@ -262,7 +262,7 @@ def tarnslation():
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special translation exe (Tender LIMIT) ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special Translation Exe', wx.OK | wx.ICON_WARNING)
                     else:
                         time.sleep(1)
                         if If_other_Than_English == True:
@@ -300,7 +300,7 @@ def tarnslation():
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special translation exe (Tender LIMIT)', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special Translation Exe', wx.OK | wx.ICON_WARNING)
                     else:
                         time.sleep(1)
                         if If_other_Than_English == True:
@@ -341,7 +341,7 @@ def tarnslation():
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special translation exe (Tender LIMIT)', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','Special Translation Exe', wx.OK | wx.ICON_WARNING)
                     else:
                         time.sleep(1)
                         if If_other_Than_English == True:
@@ -421,16 +421,13 @@ def tarnslation():
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname,
-                    "\n",
-                    exc_tb.tb_lineno)
-                time.sleep(3)
-                browser.refresh()
+                print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname,"\n",exc_tb.tb_lineno)
+                browser.get('https://translate.google.com/')
                 time.sleep(2)
                 # Exception_loop = True
 
-        wx.MessageBox('All Process Done','GUI Google Translation ', wx.OK | wx.ICON_INFORMATION)
-        # time.sleep(2)
+        wx.MessageBox('All Process Done','Special Translation Exe', wx.OK | wx.ICON_INFORMATION)
+        time.sleep(2)
         browser.close()
         sys.exit()
         # time.sleep(2)
@@ -442,7 +439,7 @@ def tarnslation():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",exc_tb.tb_lineno)
         time.sleep(2)
-        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','Special translation exe (Tender LIMIT)',wx.OK | wx.ICON_ERROR)
+        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','Special Translation Exe',wx.OK | wx.ICON_ERROR)
         time.sleep(2)
         browser.close()
         sys.exit()

@@ -21,7 +21,7 @@ try:
     browser.close()
     browser.switch_to.window(browser.window_handles[0])
 except:
-    browser.switch_to.window(browser.window_handles[0])
+    pass
 time.sleep(5)
 browser.get('https://translate.google.com/')
 input_xpath_list = ['//*[@id="source"]','//*[@aria-label="Source text"]']
@@ -68,10 +68,10 @@ def check_translated_textarea():
         if tr_val == '':
             tr_clear = True
         else:
-            browser.refresh()
+            browser.get('https://translate.google.com/')
             time.sleep(2)
-            click_on_clear()
             tr_clear = False
+
 
 def click_on_clear():
     click_clear = False
@@ -79,13 +79,12 @@ def click_on_clear():
         for Clear_xpath in Clear_xpath_list:
             try:
                 for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
+                    click_clear = True
                     clear_btn.click()
                     time.sleep(2)    
-                    click_clear = True
                     break
             except:
-                click_clear = True
-                
+                pass  
             if click_clear == True:
                 break
         if click_clear == False:
@@ -104,12 +103,8 @@ def click_on_tryagain():
     except:
         pass
     if try_btn_found == False:
-        browser.refresh()
-        time.sleep(5)
-        for i in browser.find_elements_by_xpath('//*[@id="source"]'):
-            click_on_clear()
-            i.clear()
-            break
+        browser.get('https://translate.google.com/')
+        time.sleep(2)
     time.sleep(2)
 
 
@@ -153,7 +148,7 @@ def tarnslation():
                     browser.close()
                     browser.switch_to.window(browser.window_handles[0])
                 except:
-                    browser.switch_to.window(browser.window_handles[0])
+                   pass
                 id = "%s" % (row["Posting_Id"])
                 source = "%s" % (html.unescape(row["source"]))
                 notice_no = "%s" % (html.unescape(row["notice_no"]))
@@ -426,11 +421,8 @@ def tarnslation():
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname,
-                    "\n",
-                    exc_tb.tb_lineno)
-                time.sleep(3)
-                browser.refresh()
+                print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname,"\n",exc_tb.tb_lineno)
+                browser.get('https://translate.google.com/')
                 time.sleep(2)
                 # Exception_loop = True
 
@@ -445,12 +437,9 @@ def tarnslation():
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",
-              exc_tb.tb_lineno)
+        print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",exc_tb.tb_lineno)
         time.sleep(2)
-        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ',
-                      'GUI Google Translation ',
-                      wx.OK | wx.ICON_ERROR)
+        wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','GUI Google Translation ',wx.OK | wx.ICON_ERROR)
         time.sleep(2)
         browser.close()
         sys.exit()

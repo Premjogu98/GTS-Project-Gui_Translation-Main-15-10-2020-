@@ -1,6 +1,6 @@
 ('F:\\Office Projects\\Gui_Translation\\build\\Gui_Translation\\PYZ-00.pyz',
- [('copy', 'f:\\python\\lib\\copy.py', 'PYMODULE'),
-  ('_py_abc', 'f:\\python\\lib\\_py_abc.py', 'PYMODULE'),
+ [('_py_abc', 'f:\\python\\lib\\_py_abc.py', 'PYMODULE'),
+  ('copy', 'f:\\python\\lib\\copy.py', 'PYMODULE'),
   ('doctest', 'f:\\python\\lib\\doctest.py', 'PYMODULE'),
   ('argparse', 'f:\\python\\lib\\argparse.py', 'PYMODULE'),
   ('textwrap', 'f:\\python\\lib\\textwrap.py', 'PYMODULE'),
