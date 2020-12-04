@@ -10,7 +10,7 @@ from selenium.webdriver.chrome.options import Options
 
 app = wx.App()
 chrome_options = Options()
-chrome_options.add_extension('C:\\Translation EXE\\oneclick.crx')
+chrome_options.add_extension('C:\\Translation EXE\\BrowsecVPN.crx')
 browser = webdriver.Chrome(executable_path=str(f"C:\\Translation EXE\\chromedriver.exe"),chrome_options=chrome_options)
 browser.maximize_window()
 # browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
@@ -83,6 +83,7 @@ def click_on_clear():
             i.clear()
 
     click_clear = False
+    error = False
     for Clear_xpath in Clear_xpath_list:
         try:
             for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
@@ -91,10 +92,28 @@ def click_on_clear():
                 time.sleep(2)    
                 break
         except:
-            # print('Error: Clear Button Not Found')
-            pass  
+            error = True  
         if click_clear == True:
             break
+    if error == True: # this below code for urdu language
+        try:
+            for click_on_google_translate_logo in browser.find_elements_by_xpath('//*[@title="Google Translate"]/span[2]'):
+                click_on_google_translate_logo_text = click_on_google_translate_logo.get_attribute('innerText').lower().strip()
+                if 'translate' in click_on_google_translate_logo_text:
+                    click_on_google_translate_logo.click()
+                    time.sleep(3)
+                    break
+        except:
+            print('Error while clicking google translation logo')
+        try:
+            for click_detect_lang in browser.find_elements_by_xpath('//*[@jsname="bN97Pc"]/span'):
+                click_detect_lang_text = click_detect_lang.get_attribute('innerText').lower().strip()
+                if 'detect language' in click_detect_lang_text:
+                    click_detect_lang.click()
+                    time.sleep(3)
+                    break
+        except:
+            pass
 
 def click_on_tryagain():
     print(' -_-  Please wait browser will be refresh automatically after 30 SEC  === NO OUTPUT FOUND ===  -_- ')
@@ -447,16 +466,7 @@ def tarnslation():
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 error_sen = f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}"
                 print(error_sen)
-                if 'target window already closed' not in str(error_sen):
-                    browser.get('https://translate.google.com/')
-                else:
-                    browser.execute_script('''window.open("https://translate.google.com/","_blank");''') # open new window
-                    try:
-                        browser.switch_to.window(browser.window_handles[0])
-                        browser.close()
-                        browser.switch_to.window(browser.window_handles[0])
-                    except:
-                        pass
+                browser.get('https://translate.google.com/')
                 time.sleep(2)
                 # Exception_loop = True
 
