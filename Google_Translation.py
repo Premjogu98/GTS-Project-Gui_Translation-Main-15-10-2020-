@@ -8,6 +8,7 @@ import html
 import string
 import Global_var
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 app = wx.App()
 
 chrome_options = Options()
@@ -66,92 +67,114 @@ def check_translated_textarea():
             for tr_box in browser.find_elements_by_xpath(output_xpath):
                 tr_val = 'Wait until Output Clear'
                 print(tr_val)
-                time.sleep(5)    
+                time.sleep(2)    
         if tr_val == '':
             tr_clear = True
         else:
             browser.get('https://translate.google.com/')
-            time.sleep(2)
             tr_clear = False
 
 
-def click_on_clear():
-    for input_xpath in input_xpath_list:
-        for i in browser.find_elements_by_xpath(input_xpath):
-            i.clear()
+# def click_on_clear():
+#     for input_xpath in input_xpath_list:
+#         for i in browser.find_elements_by_xpath(input_xpath):
+#             i.clear()
 
-    click_clear = False
-    error = False
-    for Clear_xpath in Clear_xpath_list:
-        try:
-            for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
-                click_clear = True
-                clear_btn.click()
-                time.sleep(2)    
-                break
-        except:
-            error = True  
-        if click_clear == True:
-            break
-    if error == True:  # this below code for urdu language
-        try:
-            for click_on_google_translate_logo in browser.find_elements_by_xpath('//*[@title="Google Translate"]/span[2]'):
-                click_on_google_translate_logo_text = click_on_google_translate_logo.get_attribute('innerText').lower().strip()
-                if 'translate' in click_on_google_translate_logo_text:
-                    click_on_google_translate_logo.click()
-                    time.sleep(3)
-                    break
-        except:
-            print('Error while clicking google translation logo')
-        try:
-            for click_detect_lang in browser.find_elements_by_xpath('//*[@jsname="bN97Pc"]/span'):
-                click_detect_lang_text = click_detect_lang.get_attribute('innerText').lower().strip()
-                if 'detect language' in click_detect_lang_text:
-                    click_detect_lang.click()
-                    time.sleep(3)
-                    break
-        except:
-            pass
-    
+#     click_clear = False
+#     error = False
+#     for Clear_xpath in Clear_xpath_list:
+#         try:
+#             for clear_btn in browser.find_elements_by_xpath(Clear_xpath):
+#                 click_clear = True
+#                 clear_btn.click()
+#                 time.sleep(2)    
+#                 break
+#         except:
+#             error = True  
+#         if click_clear == True:
+#             break
+#     if error == True:  # this below code for urdu language
+#         clicking_process_on_transltion_logo()
+
+
 
 def click_on_tryagain():
-    print(' -_-  Please wait browser will be refresh automatically after 30 SEC  === NO OUTPUT FOUND === -_- ')
-    time.sleep(30)
+    # print(' -_-  Please wait browser will be refresh automatically after 30 SEC  === NO OUTPUT FOUND === -_- ')
+    print(' -_-  Please wait page will be refresh automatically after 10 SEC  === NO OUTPUT FOUND === -_- ')
+    time.sleep(10)
+    main_string = ''
+    for output_xpath in output_xpath_list:
+        for output_textarea in browser.find_elements_by_xpath(output_xpath):
+            main_string = output_textarea.get_attribute('innerText')
+            return main_string
+            
     try_btn_found = False
     try:
         for try_again_btn in browser.find_elements_by_xpath('//*[@class="tlid-result-container-error-button translation-error-button"]'):
             try_again_btn.click()
+            time.sleep(3)
             try_btn_found = True
+            for output_xpath in output_xpath_list:
+                for output_textarea in browser.find_elements_by_xpath(output_xpath):
+                    main_string = output_textarea.get_attribute('innerText')
             break
     except:
         print('Error:  Try Again Button Not Found')
     if try_btn_found == False:
+        # clicking_process_on_transltion_logo()   
         browser.get('https://translate.google.com/')
-        time.sleep(2)
-    time.sleep(2)
+    return main_string
 
+# def clicking_process_on_transltion_logo():
+#     try:
+#         for click_on_google_translate_logo in browser.find_elements_by_xpath('//*[@title="Google Translate"]/span[2]'):
+#             click_on_google_translate_logo_text = click_on_google_translate_logo.get_attribute('innerText').lower().strip()
+#             if 'translate' in click_on_google_translate_logo_text:
+#                 click_on_google_translate_logo.click()
+#                 time.sleep(1)
+#                 break
+#     except:
+#         print('Error while clicking google translation logo')
+#     try:
+#         for click_detect_lang in browser.find_elements_by_xpath('//*[@jsname="bN97Pc"]/span'):
+#             click_detect_lang_text = click_detect_lang.get_attribute('innerText').lower().strip()
+#             if 'detect language' in click_detect_lang_text:
+#                 click_detect_lang.click()
+#                 time.sleep(1)
+#                 break
+#     except:
+#         pass
+# def language_detect():
+#     If_other_Than_English = True
+#     for language_detect in browser.find_elements_by_xpath('//*[@class="goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-right jfk-button-checked"]'):
+#         language_detect = language_detect.get_attribute('innerText').lower()
+#         if 'english' not in language_detect:
+#             If_other_Than_English = True
+#         else:
+#             If_other_Than_English = False
+#         break
+#     return If_other_Than_English
 
-def language_detect():
-    If_other_Than_English = True
-    for language_detect in browser.find_elements_by_xpath('//*[@class="goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-right jfk-button-checked"]'):
-        language_detect = language_detect.get_attribute('innerText').lower()
-        if 'english' not in language_detect:
-            If_other_Than_English = True
-        else:
-            If_other_Than_English = False
-        break
-    return If_other_Than_English
-
-def something_Went_wrong():
-    browser.get('https://translate.google.com/')
-    time.sleep(10)
-    if_find_xpath = False
-    for input_xpath in input_xpath_list:
-        for i in browser.find_elements_by_xpath(input_xpath):
-            if_find_xpath = True
-    if if_find_xpath == False:
-        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
-
+# def something_Went_wrong():
+#     browser.get('https://translate.google.com/')
+#     time.sleep(2)
+#     if_find_xpath = False
+#     for input_xpath in input_xpath_list:
+#         for i in browser.find_elements_by_xpath(input_xpath):
+#             if_find_xpath = True
+#     if if_find_xpath == False:
+#         wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+# def find_string_lenth(string):
+#     string_len = 0    
+#     while string[string_len:]: 
+#         string_len += 1
+#     return string_len
+# def clear_textarea(string):
+#     for input_xpath in input_xpath_list:
+#         for i in browser.find_elements_by_xpath(input_xpath):
+#             for clear_range in range(len(string)+5):
+#                 i.send_keys(Keys.BACKSPACE)
+                
 def translation():
     try:
         trasns = connection()
@@ -208,73 +231,74 @@ def translation():
 
                 if not re.match("^[\W A-Za-z0-9_@?./#&+-]*$", notice_no):
                     is_available = 1
-                    click_on_clear()
-                    check_translated_textarea()
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
-                            i.clear()
+                            # i.clear()
+                            i.send_keys(Keys.CONTROL,'a',Keys.BACKSPACE)
+                            time.sleep(1)
+                            # i.send_keys(Keys.BACKSPACE)
+                            check_translated_textarea()
                             notice_no = re.sub('\s+', ' ', notice_no)
-                            notice_no = notice_no.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
-                            i.send_keys(str(notice_no))
+                            i.send_keys(str(notice_no.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n').strip()))
+                            time.sleep(4)
                             is_available = 0
                             break
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        # wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
                         time.sleep(2)
-                        something_Went_wrong() # if Chrome Hanged or some other thing happend with chrome 
                     else:
-                        time.sleep(5)
+                        # time.sleep(4)
                         for output_xpath in output_xpath_list:
                             for en_notice_no in browser.find_elements_by_xpath(output_xpath):
-                                en_notice_no = en_notice_no.get_attribute('innerText')
+                                en_notice_no = en_notice_no.get_attribute('innerText').replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\").strip()
                                 en_notice_no_done = True
                                 break
                             if en_notice_no_done == True:
                                 break
                         if en_notice_no_done == False:
-                            click_on_tryagain()
+                            en_notice_no = click_on_tryagain()
                 else:
                     en_notice_no = notice_no
-                    en_notice_no_done = True
+                    en_notice_no_done = True              
                 print(f'Notice_No : {en_notice_no}')
 
                 is_available = 1
                 if purchaser != '':
-                    click_on_clear()
-                    check_translated_textarea()
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
-                            i.clear()
+                            # i.clear()
+                            i.send_keys(Keys.CONTROL,'a',Keys.BACKSPACE)
+                            time.sleep(1)
+                            # i.send_keys(Keys.BACKSPACE)
+                            check_translated_textarea()
                             purchaser = re.sub('\s+', ' ', purchaser)
-                            purchaser = purchaser.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
-                            i.send_keys(str(purchaser))
-                            time.sleep(5)
-                            If_other_Than_English = language_detect()
+                            i.send_keys(str(purchaser.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n').strip()))
+                            time.sleep(4)
+                            # If_other_Than_English = language_detect()
                             is_available = 0
                             break
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        # wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
                         time.sleep(2)
-                        something_Went_wrong() # if Chrome Hanged or some other thing happend with chrome 
                     else:
-                        time.sleep(1)
-                        if If_other_Than_English == True:
-                            for output_xpath in output_xpath_list:
-                                for en_purchaser in browser.find_elements_by_xpath(output_xpath):
-                                    en_purchaser = en_purchaser.get_attribute('innerText').upper()
-                                    en_purchaser_done = True
-                                    break
-                                if en_purchaser_done == True:
-                                    break
-                            if en_purchaser_done == False:
-                                click_on_tryagain()
-                        else:
-                            en_purchaser = purchaser
-                            en_purchaser_done = True
+                        # if If_other_Than_English == True:
+                        time.sleep(2)
+                        for output_xpath in output_xpath_list:
+                            for en_purchaser in browser.find_elements_by_xpath(output_xpath):
+                                en_purchaser = en_purchaser.get_attribute('innerText').upper().replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\").strip()
+                                en_purchaser_done = True
+                                break
+                            if en_purchaser_done == True:
+                                break
+                        if en_purchaser_done == False:
+                            en_purchaser = click_on_tryagain()
+                        # else:
+                        #     en_purchaser = purchaser
+                        #     en_purchaser_done = True
                 else:
                     en_purchaser = purchaser
                     en_purchaser_done = True
@@ -284,39 +308,38 @@ def translation():
 
                 is_available = 1
                 if address !='':
-                    click_on_clear()
-                    check_translated_textarea()
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
-                            i.clear()
+                            # i.clear()
+                            i.send_keys(Keys.CONTROL,'a',Keys.BACKSPACE)
+                            time.sleep(1)
+                            # i.send_keys(Keys.BACKSPACE)
+                            check_translated_textarea()
                             address = re.sub('\s+', ' ', address)
-                            address = address.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
-                            i.send_keys(str(address))
+                            i.send_keys(str(address.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n').strip()))
                             time.sleep(4)
-                            If_other_Than_English = language_detect()
                             is_available = 0
                             break
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        # wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
                         time.sleep(2)
-                        something_Went_wrong() # if Chrome Hanged or some other thing happend with chrome 
                     else:
-                        time.sleep(1)
-                        if If_other_Than_English == True:
-                            for output_xpath in output_xpath_list:
-                                for en_address in browser.find_elements_by_xpath(output_xpath):
-                                    en_address = en_address.get_attribute('innerText')
-                                    en_address_done = True
-                                    break
-                                if en_address_done == True:
-                                    break
-                            if en_address_done == False:
-                                click_on_tryagain()
-                        else:
-                            en_address = address
-                            en_address_done = True
+                        # if If_other_Than_English == True:
+                        time.sleep(2)
+                        for output_xpath in output_xpath_list:
+                            for en_address in browser.find_elements_by_xpath(output_xpath):
+                                en_address = en_address.get_attribute('innerText').replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\").strip()
+                                en_address_done = True
+                                break
+                            if en_address_done == True:
+                                break
+                        if en_address_done == False:
+                            en_address = click_on_tryagain()
+                        # else:
+                        #     en_address = address
+                        #     en_address_done = True
                 else:
                     en_address = address
                     en_address_done = True
@@ -324,39 +347,41 @@ def translation():
 
                 is_available = 1
                 if title != "":
-                    click_on_clear()
-                    check_translated_textarea()
+                    # click_on_clear()
+                    # check_translated_textarea()
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
-                            i.clear()
+                            # i.clear()
+                            i.send_keys(Keys.CONTROL,'a',Keys.BACKSPACE)
+                            time.sleep(1)
+                            # i.send_keys(Keys.BACKSPACE)
+                            check_translated_textarea()
                             title = re.sub('\s+', ' ', title)
-                            title = title.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
-                            i.send_keys(str(title))
-                            time.sleep(5)
-                            If_other_Than_English = language_detect()
+                            i.send_keys(str(title.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n').strip()))
+                            time.sleep(4)
+                            # If_other_Than_English = language_detect()
                             is_available = 0
                             break
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        # wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
                         time.sleep(2)
-                        something_Went_wrong() # if Chrome Hanged or some other thing happend with chrome 
                     else:
-                        time.sleep(1)
-                        if If_other_Than_English == True:
-                            for output_xpath in output_xpath_list:
-                                for en_title in browser.find_elements_by_xpath(output_xpath):
-                                    en_title = en_title.get_attribute('innerText')
-                                    en_title_done = True
-                                    break
-                                if en_title_done == True:
-                                    break
-                            if en_title_done == False:
-                                click_on_tryagain()
-                        else:
-                            en_title = title
-                            en_title_done = True
+                        # if If_other_Than_English == True:
+                        time.sleep(2)
+                        for output_xpath in output_xpath_list:
+                            for en_title in browser.find_elements_by_xpath(output_xpath):
+                                en_title = en_title.get_attribute('innerText').replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\").strip()
+                                en_title_done = True
+                                break
+                            if en_title_done == True:
+                                break
+                        if en_title_done == False:
+                            en_title = click_on_tryagain()
+                        # else:
+                        #     en_title = title
+                        #     en_title_done = True
                 else:
                     en_title = title
                     en_title_done = True
@@ -365,52 +390,45 @@ def translation():
 
                 is_available = 1
                 if description != "":
-                    click_on_clear()
-                    check_translated_textarea()
                     for input_xpath in input_xpath_list:
                         for i in browser.find_elements_by_xpath(input_xpath):
-                            i.clear()
+                            # i.clear()
+                            i.send_keys(Keys.CONTROL,'a',Keys.BACKSPACE)
+                            time.sleep(1)
+                            # i.send_keys(Keys.BACKSPACE)
+                            check_translated_textarea()
                             description = re.sub('\s+', ' ', description)
-                            description = description.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n')
                             if len(description) >= 1200:
                                 description = description[:1200] + '...'
-                            i.send_keys(str(description))
-                            time.sleep(5)
-                            If_other_Than_English = language_detect()
+                            i.send_keys(str(description.replace('<br>','<br>\n').replace('<BR>','<br>\n').replace('<Br>','<br>\n').strip()))
+                            time.sleep(4)
+                            # If_other_Than_English = language_detect()
                             is_available = 0
                             break
                         if is_available == 0:
                             break
                     if is_available == 1:
-                        # wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
+                        wx.MessageBox('Something Went Wrong Please Refresh Google Translation Page Then Click On -_- OK -_- ','GUI Google Translation ', wx.OK | wx.ICON_WARNING)
                         time.sleep(2)
-                        something_Went_wrong() # if Chrome Hanged or some other thing happend with chrome 
                     else:
-                        time.sleep(1)
-                        if If_other_Than_English == True:
-                            for output_xpath in output_xpath_list:
-                                for en_description in browser.find_elements_by_xpath(output_xpath):
-                                    en_description = en_description.get_attribute('innerText')
-                                    en_description_done = True
-                                    break
-                                if en_description_done == True:
-                                    break
-                            if en_description_done == False:
-                                click_on_tryagain()
-                        else:
-                            en_description = description
-                            en_description_done = True
+                        # if If_other_Than_English == True:
+                        time.sleep(2)
+                        for output_xpath in output_xpath_list:
+                            for en_description in browser.find_elements_by_xpath(output_xpath):
+                                en_description = en_description.get_attribute('innerText').replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\").strip()
+                                en_description_done = True
+                                break
+                            if en_description_done == True:
+                                break
+                        if en_description_done == False:
+                            en_description = click_on_tryagain()
+                        # else:
+                        #     en_description = description
+                        #     en_description_done = True
                 else:
                     en_description = description
                     en_description_done = True
-
                 print(f'Details : {en_description}')
-
-                en_notice_no = en_notice_no.replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\")
-                en_purchaser = en_purchaser.replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\")
-                en_address = en_address.replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\")
-                en_title = en_title.replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\")
-                en_description = en_description.replace("'", "''").replace("< ", "<").replace(" >", ">").replace("</ ", "</").replace("\\", "\\\\")
 
                 if len(en_title) > 250:
                     en_title = en_title[:246]
@@ -438,9 +456,7 @@ def translation():
                         try:
                             trasns = connection()
                             cur = trasns.cursor()
-                            Update_Website_Status = f"UPDATE l2l_tenders_tbl SET is_english = '0', notice_no='{en_notice_no}',purchaser_name='{en_purchaser}',purchaser_address='{en_address}',description='{en_title}',tender_details='{en_description}' WHERE Posting_Id = '{id}'"
-                            # print(Update_Website_Status)
-                            cur.execute(Update_Website_Status)
+                            cur.execute(f"UPDATE l2l_tenders_tbl SET is_english = '0', notice_no='{en_notice_no}',purchaser_name='{en_purchaser}',purchaser_address='{en_address}',description='{en_title}',tender_details='{en_description}' WHERE Posting_Id = '{id}'")
                             trasns.commit()
                             a = True
                         except Exception as e:
@@ -452,38 +468,29 @@ def translation():
                 print(f'Translation Completed : {count}  / {len(rows)}\n')
                 # Exception_loop = False
                 Tender_count_for_Refresh += 1
-                if Tender_count_for_Refresh == 100:
+                if Tender_count_for_Refresh == 25:
                     Tender_count_for_Refresh = 0
                     clear = lambda: os.system('cls')  # Clear command Prompt
                     clear()
                     browser.delete_all_cookies()
                     browser.execute_script("location.reload(true);")
-                    time.sleep(4)
+                    time.sleep(2)
                     print(f'Translation Completed : {count}  / {len(rows)}\n')
                     
             except Exception as e:
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                error_sen = f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}"
-                print(error_sen)
+                print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
                 browser.get('https://translate.google.com/')
                 time.sleep(2)
                 # Exception_loop = True
-
-        # wx.MessageBox('All Process Done','GUI Google Translation ', wx.OK | wx.ICON_INFORMATION)
-        # time.sleep(2)
-        # browser.close()
-        # sys.exit()
-        # time.sleep(2)
         translation()
             
 
     except Exception as e:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        # print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname, "\n",exc_tb.tb_lineno)
-        error_sen = f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}"
-        print(error_sen)
+        print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
         wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','GUI Google Translation ',wx.OK | wx.ICON_ERROR)
         time.sleep(2)
         browser.close()
