@@ -9,6 +9,7 @@ import string
 import Global_var
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 app = wx.App()
 
 chrome_options = Options()
@@ -184,9 +185,9 @@ def translation():
         rows = cur.fetchall()
 
         if len(rows) == 0:
-            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', 'GUI Google Translation ',wx.OK | wx.ICON_INFORMATION)
-            time.sleep(2)
             browser.close()
+            wx.MessageBox(' -_-  No Tender Available For Translation -_- ', 'GUI Google Translation ',wx.OK | wx.ICON_INFORMATION)    
+            time.sleep(2)
             sys.exit()
 
         print(f' Total Tenders Found For Translation : {len(rows)}')
@@ -473,27 +474,44 @@ def translation():
                     clear = lambda: os.system('cls')  # Clear command Prompt
                     clear()
                     browser.delete_all_cookies()
-                    browser.execute_script("location.reload(true);")
+                    try:
+                        browser.execute_script("window.open('');")
+                        browser.switch_to.window(browser.window_handles[1])
+                        browser.get('chrome://settings/clearBrowserData')
+                        time.sleep(2)
+                        actions = ActionChains(browser) 
+                        actions.send_keys(Keys.TAB * 7 + Keys.ENTER) # confirm
+                        actions.perform()
+                        time.sleep(10) # wait some time to finish
+                        browser.close()
+                        time.sleep(1)
+                        browser.switch_to.window(browser.window_handles[0])
+                    except:
+                        pass
+                    # browser.execute_script("location.reload(true);")
                     time.sleep(2)
                     print(f'Translation Completed : {count}  / {len(rows)}\n')
                     
             except Exception as e:
-                exc_type, exc_obj, exc_tb = sys.exc_info()
+                exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
-                browser.get('https://translate.google.com/')
+                try:
+                    browser.get('https://translate.google.com/')
+                except:
+                    wx.MessageBox(' -_- Please Refresh The Page Then Click On OK MessageBox -_- ','GUI Google Translation ',wx.OK | wx.ICON_ERROR)
                 time.sleep(2)
                 # Exception_loop = True
         translation()
             
 
     except Exception as e:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
+        exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
         wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','GUI Google Translation ',wx.OK | wx.ICON_ERROR)
-        time.sleep(2)
         browser.close()
+        time.sleep(2)
         sys.exit()
 
 

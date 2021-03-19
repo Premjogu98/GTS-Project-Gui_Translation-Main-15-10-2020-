@@ -53,7 +53,6 @@ import time
 #             pass
 
 def connection():
-    connection = ''
     a3 = 0
     while a3 == 0:
         try:
@@ -64,14 +63,13 @@ def connection():
                                          charset='utf8',
                                          cursorclass=pymysql.cursors.DictCursor)
             return connection
-        except pymysql.connect as e:
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             print("Error ON : ", sys._getframe().f_code.co_name + "--> " + str(e), "\n", exc_type, "\n", fname,
                   "\n", exc_tb.tb_lineno)
             time.sleep(10)
             a3 = 0
-            connection.close()
 
 
 class MyFrame(wx.Frame):   
@@ -81,8 +79,7 @@ class MyFrame(wx.Frame):
         self.panel = wx.Panel(self,size=(800, 50), pos=(0, 0), style=wx.SIMPLE_BORDER)
         self.bSizer = wx.BoxSizer(wx.VERTICAL)
         self.bSizer1 = wx.BoxSizer(wx.HORIZONTAL)
-        self.scroll = wx.lib.scrolledpanel.ScrolledPanel(self, -1, size=(770, 400), pos=(7, 55),
-                                                         style=wx.SIMPLE_BORDER)
+        self.scroll = wx.lib.scrolledpanel.ScrolledPanel(self, -1, size=(770, 400), pos=(7, 55),style=wx.SIMPLE_BORDER)
         self.scroll.SetupScrolling()
         self.scroll.SetBackgroundColour('#FFFFFF')
         self.scroll.SetForegroundColour('Black')
