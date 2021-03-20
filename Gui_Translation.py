@@ -76,10 +76,11 @@ class MyFrame(wx.Frame):
      
     def __init__(self):
         super().__init__(parent=None, title='Google Translation GUI',pos = (100,150), size =(800,500) ,style = wx.DEFAULT_FRAME_STYLE & ~wx.MAXIMIZE_BOX ^ wx.RESIZE_BORDER)
-        self.panel = wx.Panel(self,size=(800, 50), pos=(0, 0), style=wx.SIMPLE_BORDER)
+        self.panel = wx.Panel(self,size=(800, 60), pos=(0, 0),style=wx.NO_BORDER)
+        self.panel.SetBackgroundColour('white')
         self.bSizer = wx.BoxSizer(wx.VERTICAL)
         self.bSizer1 = wx.BoxSizer(wx.HORIZONTAL)
-        self.scroll = wx.lib.scrolledpanel.ScrolledPanel(self, -1, size=(770, 400), pos=(7, 55),style=wx.SIMPLE_BORDER)
+        self.scroll = wx.lib.scrolledpanel.ScrolledPanel(self, -1, size=(785, 410), pos=(0, 55),style=wx.NO_BORDER)
         self.scroll.SetupScrolling()
         self.scroll.SetBackgroundColour('#FFFFFF')
         self.scroll.SetForegroundColour('Black')
@@ -126,26 +127,29 @@ class MyFrame(wx.Frame):
         self.Panel_Height = 2
         self.cb_list = []
         for source in Source_list:
-            self.scroll_panel = wx.Panel(self.scroll, size=(735, 30), pos=(4, self.Panel_Height),
-                                         style=wx.SIMPLE_BORDER)
-            self.scroll_panel.SetBackgroundColour('#7854E0')
-            self.cb = wx.CheckBox(self.scroll_panel, -1, str(source), (12, 6))
+            self.scroll_panel = wx.Panel(self.scroll, size=(772, 30), pos=(4, self.Panel_Height),style=wx.NO_BORDER)
+            self.scroll_panel.SetBackgroundColour('#FF3F0B')
+            self.cb = wx.CheckBox(self.scroll_panel, -1, f' {str(source)}', (12, 4),(500,20),style=wx.NO_BORDER)
+            font = wx.Font(12, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+            self.cb.SetFont(font)
             self.cb.SetForegroundColour('White')
             self.cb_list.append(self.cb)
 
             self.bSizer.Add(self.scroll_panel, 0, wx.ALL, 5)
             self.scroll.SetupScrolling()
 
-        self.Go_btn = wx.Button(self.panel, label='GO', pos=(580, 10),style=wx.NO_BORDER)
-        font = wx.Font(10, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        self.Go_btn = wx.Button(self.panel, label='GO', pos=(520, 9),size = (100,30),style=wx.NO_BORDER)
+        font = wx.Font(12, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         self.Go_btn.SetFont(font)
         self.Go_btn.Bind(wx.EVT_BUTTON, self.GO_btn)
+        self.Go_btn.SetCursor(wx.Cursor(wx.CURSOR_HAND))
         self.Go_btn.SetForegroundColour('Black')
         self.Go_btn.SetBackgroundColour('Green')
 
-        self.Exit_btn = wx.Button(self.panel, label='EXIT', pos=(680, 10),style=wx.NO_BORDER)
-        font = wx.Font(10, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
-        # self.Source_btn.SetFont(font)
+        self.Exit_btn = wx.Button(self.panel, label='EXIT', pos=(640, 9),size = (100,30),style=wx.NO_BORDER)
+        font = wx.Font(12, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        self.Exit_btn.SetFont(font)
+        self.Exit_btn.SetCursor(wx.Cursor(wx.CURSOR_SPRAYCAN))
         self.Exit_btn.Bind(wx.EVT_BUTTON, self.exit)
         self.Exit_btn.SetForegroundColour('White')
         self.Exit_btn.SetBackgroundColour('Red')
@@ -191,7 +195,7 @@ class MyFrame(wx.Frame):
         else:
             wx.MessageBox(' -_- Please Select Source  -_- ', 'Gui Translation',wx.OK | wx.ICON_ERROR)
 
-        
+
     def exit(self,event):
         dlg = wx.MessageDialog(None, "Kya Aap Ko yaha Se Prasthan (EXIT) karna Hai !!!!", 'Gui Translation', wx.YES_NO | wx.ICON_WARNING)
         result = dlg.ShowModal()

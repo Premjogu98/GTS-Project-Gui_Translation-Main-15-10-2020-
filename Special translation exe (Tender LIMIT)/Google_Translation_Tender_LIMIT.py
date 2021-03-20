@@ -17,7 +17,6 @@ browser = webdriver.Chrome(executable_path=str(f"C:\\Translation EXE\\chromedriv
 browser.maximize_window()
 # browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
 wx.MessageBox(' -_-  Add Extension and Then Click On OK BUTTON -_- ', 'Special Translation Exe', wx.OK | wx.ICON_ERROR)
-
 try:
     browser.switch_to.window(browser.window_handles[1])
     time.sleep(1)
@@ -180,10 +179,10 @@ def tarnslation():
         cur.execute(str(Text_query))  
         rows = cur.fetchall()
         if len(rows) == 0:
-            browser.close()
+            browser.quit()  # closes all Browser windows and safely ends the session
             wx.MessageBox(' -_-  No Tender Available For Translation -_- ', ' Special Translation Exe ', wx.OK | wx.ICON_INFORMATION)
             time.sleep(2)
-            sys.exit()
+            quit()
 
         print(f' Total Tenders Found For Translation : {len(rows)}')
         count = 0
@@ -492,10 +491,10 @@ def tarnslation():
                     wx.MessageBox(' -_- Please Refresh The Page Then Click On OK MessageBox -_- ','Special Translation Exe',wx.OK | wx.ICON_ERROR)
                 time.sleep(2)
                 # Exception_loop = True
-        browser.close()
+        browser.quit()  # closes all Browser windows and safely ends the session
         wx.MessageBox('All Process Done','Special Translation Exe', wx.OK | wx.ICON_INFORMATION)
         time.sleep(2)
-        sys.exit()
+        quit()
             
 
     except Exception as e:
@@ -503,9 +502,9 @@ def tarnslation():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
         wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','Special Translation Exe',wx.OK | wx.ICON_ERROR)
-        browser.close()
+        browser.quit()  # closes all Browser windows and safely ends the session
         time.sleep(2)
-        sys.exit()
+        quit()
 
 
 tarnslation()

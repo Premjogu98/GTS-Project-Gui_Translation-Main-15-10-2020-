@@ -185,10 +185,10 @@ def translation():
         rows = cur.fetchall()
 
         if len(rows) == 0:
-            browser.close()
+            browser.quit()  # closes all Browser windows and safely ends the session
             wx.MessageBox(' -_-  No Tender Available For Translation -_- ', 'GUI Google Translation ',wx.OK | wx.ICON_INFORMATION)    
             time.sleep(2)
-            sys.exit()
+            quit()
 
         print(f' Total Tenders Found For Translation : {len(rows)}')
         count = 0
@@ -510,9 +510,9 @@ def translation():
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print(f"Error ON : Error Details Below \nFunction Name: {sys._getframe().f_code.co_name} \nException {str(e)}Error File Name: {fname}\nError Line Number: {exc_tb.tb_lineno}")
         wx.MessageBox(' -_- (ERROR ON MAIN EXCEPTION) -_- ','GUI Google Translation ',wx.OK | wx.ICON_ERROR)
-        browser.close()
+        browser.quit()  # closes all Browser windows and safely ends the session
         time.sleep(2)
-        sys.exit()
+        quit()
 
 
 translation()
